@@ -1,0 +1,111 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Nazar AI</title>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 30px;
+            background: #101827;
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+
+        h1 {
+            color: #60a5fa;
+        }
+
+        video {
+            width: 100%;
+            max-width: 650px;
+            background: black;
+            border-radius: 15px;
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 14px 25px;
+            margin: 15px;
+            border: none;
+            border-radius: 8px;
+            background: #2563eb;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        #status {
+            margin-top: 15px;
+            color: #93c5fd;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>👁️ Nazar AI</h1>
+    <h3>A Second Pair of Eyes</h3>
+
+    <p>Your AI-powered visual assistant</p>
+
+    <video id="camera" autoplay playsinline muted></video>
+
+    <p id="status">Requesting camera and microphone access...</p>
+
+    <button id="startButton">Enable Camera & Microphone</button>
+
+    <script>
+
+        const video = document.getElementById("camera");
+        const status = document.getElementById("status");
+        const startButton = document.getElementById("startButton");
+
+        let cameraStream = null;
+
+        async function startCamera() {
+
+            try {
+
+                status.textContent = "Requesting permissions...";
+
+                cameraStream = await navigator.mediaDevices.getUserMedia({
+                    video: {
+                        facingMode: "user",
+                        width: { ideal: 1280 },
+                        height: { ideal: 720 }
+                    },
+                    audio: true
+                });
+
+                video.srcObject = cameraStream;
+
+                status.textContent =
+                    "Camera and microphone are active.";
+
+                startButton.style.display = "none";
+
+            } catch (error) {
+
+                status.textContent =
+                    "Permission denied or device unavailable. Please try again.";
+
+                console.error(error);
+
+            }
+        }
+
+        startButton.addEventListener("click", startCamera);
+
+        // Automatically request access when the page opens.
+        window.addEventListener("load", startCamera);
+
+    </script>
+
+</body>
+</html>
